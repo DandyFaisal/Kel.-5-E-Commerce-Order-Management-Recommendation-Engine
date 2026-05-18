@@ -3,7 +3,7 @@ import random
 
 from typing import Dict, List
 
-from model import *
+from models import *
 from multi_priority_queue import Queue
 from stack_riwayat import Stack
 from bst_katalog import BSTKatalog
@@ -114,160 +114,126 @@ def main():
             elif perintah == "ORDER" and len(parts) >= 4:
                 pelanggan, produk, tier_str = parts[1], parts[2], parts[3].upper()
                 if tier_str not in TIER:
-                    print(f"  ✗ Tier '{tier_str}' tidak valid. Gunakan: PREMIUM, REGULAR, ECONOMY\n")
+                    print(f"[ERROR] Tier '{tier_str}' tidak valid. Gunakan: PREMIUM, REGULAR, ECONOMY")
                     continue
 
-                prod = bst_katalog.search(produk)
-                if not prod:
-                    print(f"  ✗ Produk {produk} tidak ditemukan\n")
+                produk_obj = bst_katalog.search(produk)
+                if not produk_obj:
+                    print(f"[ERROR] Produk '{produk}' tidak ditemukan")
                     continue
 
-                if prod.stok <= 0:
-                    print(f"  ✗ Produk {produk} stok habis\n")
+                if produk_obj.stok <= 0:
+                    print(f"[ERROR] Stok produk '{produk}' habis")
                     continue
 
                 order_counter += 1
-                order = Order(order_counter, pelanggan, produk, TIER[tier_str], 1, prod.harga, time.time())
+                order = Order(
+                    order_id=order_counter,
+                    pelanggan=pelanggan,
+                    produk_kode=produk,
+                    tier=TIER[tier_str],
+                    qty=1,
+                    total_harga=produk_obj.harga,
+                    waktu_pesan=time.time()
+                )
+
                 queues[tier_str].enqueue(order)
+                bst_katalog.update_stok(produk, -1)
 
-                if pelanggan not in cust_stacks:
-                    cust_stacks[pelanggan] = Stack(kapasitas=10)
-                cust_stacks[pelanggan].push(order)
-                order_stack.push(order)
+                if pelanggan not in customer_history:
+                    customer_history[pelanggan] = []
+                customer_history[pelanggan].append(produk)
+
                 last_customer = pelanggan
+                graph_rek.add_copurchase(produk, produk)
 
-                print(f"  ✓ Order {order_counter}: {pelanggan} - {produk} ({tier_str}) - Rp {prod.harga:,.0f}")
-                print(f"  [O(1): Enqueue ke tier queue]\n")
+                print(f"[OK] Order #{order_counter} dari {pelanggan} - {produk_obj.nama} (Rp{produk_obj.harga:,.0f})")
 
             elif perintah == "SERVE":
                 served = False
                 for tier_name in ['PREMIUM', 'REGULAR', 'ECONOMY']:
-                    while not queues[tier_name].is_empty():
+                    if not queues[tier_name].is_empty():
                         order = queues[tier_name].dequeue()
-                        if order.order_id in canceled_orders:
-                            continue
-                        prod = bst_katalog.search(order.produk_kode)
-                        if prod and bst_katalog.update_stok(order.produk_kode, -1):
-                            order_stack.remove_by_condition(lambda o: o.order_id == order.order_id)
-                            completed_orders.append(order)
-                            if order.pelanggan not in customer_history:
-                                customer_history[order.pelanggan] = []
-                            for prev_produk in customer_history[order.pelanggan]:
-                                graph_rek.add_copurchase(prev_produk, order.produk_kode)
-                                graph_rek.add_copurchase(order.produk_kode, prev_produk)
-                            customer_history[order.pelanggan].append(order.produk_kode)
-                            print(f"  ✓ SERVE Order {order.order_id}: {order.pelanggan} - {order.produk_kode} ({tier_name})")
-                            print(f"  [O(1): Dequeue + O(log n): Update stok BST]\n")
-                            served = True
-                            break
-                    if served:
+                        completed_orders.append(order)
+                        produk_obj = bst_katalog.search(order.produk_kode)
+                        print(f"[SERVED] Order #{order.order_id} ({TIER_NAME[order.tier]}) - {order.pelanggan} | {produk_obj.nama}")
+                        served = True
                         break
                 if not served:
-                    print(f"  ✗ Tidak ada order dalam antrian\n")
+                    print("[INFO] Tidak ada order yang harus dilayani")
 
             elif perintah == "CANCEL_LAST":
-                last_order = order_stack.pop()
-                if last_order:
-                    canceled_orders.add(last_order.order_id)
-                    tier_name = TIER_NAME[last_order.tier]
-                    queues[tier_name].remove_by_condition(lambda o: o.order_id == last_order.order_id)
-                    if last_order.pelanggan in cust_stacks:
-                        cust_stacks[last_order.pelanggan].remove_by_condition(lambda o: o.order_id == last_order.order_id)
-                    print(f"  ✓ CANCEL Order {last_order.order_id}: {last_order.pelanggan} - {last_order.produk_kode}")
-                    print(f"  [O(1): Pop dari stack]\n")
+                if last_customer:
+                    for tier_name in ['PREMIUM', 'REGULAR', 'ECONOMY']:
+                        found = queues[tier_name].remove_by_condition(
+                            lambda o: o.pelanggan == last_customer
+                        )
+                        if found:
+                            canceled_orders.add(last_customer)
+                            print(f"[OK] Order terakhir dari {last_customer} dibatalkan")
+                            break
+                    if not found:
+                        print(f"[INFO] Tidak ada order dari {last_customer}")
                 else:
-                    print(f"  ✗ Tidak ada order untuk dibatalkan\n")
+                    print("[INFO] Belum ada order sebelumnya")
 
             elif perintah == "CARI_PRODUK" and len(parts) >= 2:
-                kode = parts[1].upper()
-                produk = bst_katalog.search(kode)
-                if produk:
-                    print(f"\n  Kode  : {produk.kode}")
-                    print(f"  Nama  : {produk.nama}")
-                    print(f"  Harga : Rp {produk.harga:,.0f}")
-                    print(f"  Stok  : {produk.stok}")
-                    print(f"  [O(log n): BST search]\n")
+                kode = parts[1]
+                produk_obj = bst_katalog.search(kode)
+                if produk_obj:
+                    print(f"[FOUND] {produk_obj.kode} - {produk_obj.nama} | Rp{produk_obj.harga:,.0f} | Stok: {produk_obj.stok}")
                 else:
-                    print(f"  ✗ Produk {kode} tidak ditemukan\n")
+                    print(f"[NOT FOUND] Produk '{kode}' tidak ditemukan")
 
             elif perintah == "UPDATE_STOK" and len(parts) >= 3:
-                kode = parts[1].upper()
+                kode, qty_str = parts[1], parts[2]
                 try:
-                    qty = int(parts[2])
-                    if bst_katalog.update_stok(kode, qty):
-                        prod = bst_katalog.search(kode)
-                        print(f"  ✓ UPDATE STOK {kode}: +{qty} → Stok baru: {prod.stok}")
-                        print(f"  [O(log n): BST update]\n")
+                    qty_delta = int(qty_str)
+                    if bst_katalog.update_stok(kode, qty_delta):
+                        produk_obj = bst_katalog.search(kode)
+                        print(f"[OK] Stok {kode} diperbarui. Stok baru: {produk_obj.stok}")
                     else:
-                        print(f"  ✗ Produk {kode} tidak ditemukan\n")
+                        print(f"[ERROR] Produk '{kode}' tidak ditemukan")
                 except ValueError:
-                    print(f"  ✗ Qty harus berupa angka\n")
+                    print(f"[ERROR] Qty harus angka")
 
             elif perintah == "REKOMENDASI" and len(parts) >= 2:
-                kode = parts[1].upper()
-                recom = graph_rek.rekomendasi(kode, max_hop=2)
-                if recom:
-                    print(f"  Rekomendasi untuk {kode}: {', '.join(recom)}")
-                    print(f"  [O(V+E): BFS graph]\n")
+                kode = parts[1]
+                rekomendasi = graph_rek.rekomendasi(kode)
+                if rekomendasi:
+                    print(f"[REKOMENDASI] Produk terkait {kode}: {', '.join(rekomendasi)}")
                 else:
-                    print(f"  Tidak ada rekomendasi untuk {kode}\n")
+                    print(f"[INFO] Tidak ada rekomendasi untuk {kode}")
 
             elif perintah == "RIWAYAT" and len(parts) >= 2:
                 pelanggan = parts[1]
-                if pelanggan in cust_stacks:
-                    stack = cust_stacks[pelanggan]
-                    if stack.top:
-                        print(f"\n  Riwayat Order {pelanggan}:")
-                        node = stack.top
-                        count = 0
-                        while node and count < 10:
-                            order = node.data
-                            if order.order_id in canceled_orders:
-                                node = node.next
-                                continue
-                            print(f"    {count+1}. Order {order.order_id} - {order.produk_kode} - Rp {order.total_harga:,.0f}")
-                            node = node.next
-                            count += 1
-                        print(f"  [O(1): Stack traversal]\n")
-                    else:
-                        print(f"  ✗ {pelanggan} belum punya order\n")
+                if pelanggan in customer_history:
+                    produk_list = customer_history[pelanggan]
+                    print(f"[RIWAYAT] {pelanggan}: {', '.join(produk_list)}")
                 else:
-                    print(f"  ✗ Pelanggan {pelanggan} tidak ditemukan\n")
+                    print(f"[INFO] {pelanggan} belum melakukan order")
 
             elif perintah == "LAPORAN_HARIAN":
-                if not completed_orders:
-                    print(f"  ✗ Tidak ada order yang selesai\n")
-                    continue
-
-                print(f"\n  {'='*68}")
-                print(f"  LAPORAN HARIAN - Total Order: {len(completed_orders)}".center(68))
-                print(f"  {'='*68}")
-
-                print(f"\n  [1] Sorted by Harga (Descending) - Bubble Sort O(n²):")
-                bubble_sorted = bubble_sort_by_harga(completed_orders)
-                for i, order in enumerate(bubble_sorted[:5], 1):
-                    print(f"      {i}. Order {order.order_id} - {order.produk_kode} - Rp {order.total_harga:,.0f}")
-
-                print(f"\n  [2] Sorted by Waktu (Ascending) - Insertion Sort O(n²):")
-                insertion_sorted = insertion_sort_by_waktu(completed_orders)
-                for i, order in enumerate(insertion_sorted[:5], 1):
-                    waktu = time.strftime("%H:%M:%S", time.localtime(order.waktu_pesan))
-                    print(f"      {i}. Order {order.order_id} - {waktu}")
-
-                print(f"  {'='*68}\n")
+                if completed_orders:
+                    print("\n[LAPORAN HARIAN]")
+                    print(f"Total Order Selesai: {len(completed_orders)}")
+                    sorted_by_harga = bubble_sort_by_harga(completed_orders)
+                    print("\nTop 5 Order (by Harga):")
+                    for order in sorted_by_harga[:5]:
+                        produk_obj = bst_katalog.search(order.produk_kode)
+                        print(f"  #{order.order_id} - {order.pelanggan} | {produk_obj.nama} | Rp{order.total_harga:,.0f}")
+                else:
+                    print("[INFO] Belum ada order yang selesai")
 
             elif perintah == "KELUAR":
-                print(f"  Terima kasih! Sampai jumpa.\n")
+                print("Terima kasih telah menggunakan sistem ini!")
                 break
 
             else:
-                print(f"  ✗ Perintah '{perintah}' tidak dikenali. Ketik BANTUAN\n")
+                print(f"[ERROR] Perintah '{perintah}' tidak dikenali. Ketik BANTUAN untuk bantuan.")
 
-        except KeyboardInterrupt:
-            print(f"\n  Program dihentikan.\n")
-            break
         except Exception as e:
-            print(f"  ✗ Error: {e}\n")
+            print(f"[ERROR] {str(e)}")
 
 
 if __name__ == "__main__":
