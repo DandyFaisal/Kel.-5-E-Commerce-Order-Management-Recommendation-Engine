@@ -5,6 +5,7 @@ from typing import Optional, List, Dict, Tuple
 random.seed(99)
 
 TIER = {'PREMIUM': 1, 'REGULAR': 2, 'ECONOMY': 3}
+TIER_NAME = {v: k for k, v in TIER.items()}
 
 @dataclass
 class Produk:
@@ -65,6 +66,23 @@ class Queue:
     def __len__(self) -> int:
         return self._size
 
+    def remove_by_condition(self, predicate) -> bool:
+        prev = None
+        current = self.head
+        while current:
+            if predicate(current.data):
+                if prev:
+                    prev.next = current.next
+                else:
+                    self.head = current.next
+                if current is self.tail:
+                    self.tail = prev
+                self._size -= 1
+                return True
+            prev = current
+            current = current.next
+        return False
+
 # ── Stack berbasis Linked List ───────────────────────────────
 class Stack:
     def __init__(self, kapasitas=10):
@@ -88,6 +106,21 @@ class Stack:
         self.top = self.top.next
         self._size -= 1
         return data
+
+    def remove_by_condition(self, predicate) -> bool:
+        prev = None
+        current = self.top
+        while current:
+            if predicate(current.data):
+                if prev:
+                    prev.next = current.next
+                else:
+                    self.top = current.next
+                self._size -= 1
+                return True
+            prev = current
+            current = current.next
+        return False
 
 # ── BST Katalog Produk (implementasikan) ─────────────────────
 class BSTNode:
@@ -224,30 +257,6 @@ def insertion_sort_by_waktu(orders: List[Order]) -> List[Order]:
         arr[j + 1] = key
     return arr
 
-def tambah_order(pelanggan: str, produk: str, tier_str: str,
-                 bst_katalog: BSTKatalog, queues: Dict[str, Queue],
-                 cust_stacks: Dict[str, Stack], order_counter: int) -> tuple[int, bool, str]:
-    if tier_str not in TIER:
-        return order_counter, False, f"✗ Tier '{tier_str}' tidak valid. Gunakan: PREMIUM, REGULAR, ECONOMY"
-
-    prod = bst_katalog.search(produk)
-    if not prod:
-        return order_counter, False, f"✗ Produk {produk} tidak ditemukan"
-
-    if prod.stok <= 0:
-        return order_counter, False, f"✗ Produk {produk} stok habis"
-
-    order_counter += 1
-    order = Order(order_counter, pelanggan, produk, TIER[tier_str], 1, prod.harga, time.time())
-    queues[tier_str].enqueue(order)
-
-    if pelanggan not in cust_stacks:
-        cust_stacks[pelanggan] = Stack(kapasitas=10)
-    cust_stacks[pelanggan].push(order)
-
-    prod.stok -= 1
-    return order_counter, True, f"✓ Order {order_counter}: {pelanggan} - {produk} ({tier_str}) - Rp {prod.harga:,.0f}"
-
 def main():
     # Inisialisasi
     queues = {tier: Queue() for tier in TIER}
@@ -256,6 +265,9 @@ def main():
     graph_rek = GraphRekomendasi()
     completed_orders: List[Order] = []
     order_counter = 0
+    order_stack = Stack(kapasitas=10000)
+    canceled_orders = set()
+    customer_history: Dict[str, List[str]] = {}
     last_customer = None  # Track pelanggan terakhir yang order
 
     for p in generate_produk(100):
@@ -280,7 +292,6 @@ def main():
                 print("DAFTAR PERINTAH".ljust(70))
                 print("="*70)
                 print("  ORDER <cust> <prod> <tier>     - Tambah order")
-                print("  BATCH_ORDER <jumlah>           - Tambah banyak order sekaligus")
                 print("  SERVE                          - Layani order PREMIUM→REGULAR→ECONOMY")
                 print("  CANCEL_LAST                    - Batalkan order terakhir")
                 print("  CARI_PRODUK <kode>             - Cari produk")
@@ -293,71 +304,69 @@ def main():
 
             elif perintah == "ORDER" and len(parts) >= 4:
                 pelanggan, produk, tier_str = parts[1], parts[2], parts[3].upper()
-                order_counter, success, msg = tambah_order(pelanggan, produk, tier_str,
-                                                          bst_katalog, queues, cust_stacks, order_counter)
-                if success:
-                    last_customer = pelanggan
-                    print(f"  {msg}")
-                    print(f"  [O(1): Enqueue ke tier queue]\n")
-                else:
-                    print(f"  {msg}\n")
-
-            elif perintah == "BATCH_ORDER" and len(parts) >= 2:
-                try:
-                    batch_count = int(parts[1])
-                except ValueError:
-                    print("  ✗ Jumlah batch harus berupa angka\n")
+                if tier_str not in TIER:
+                    print(f"  ✗ Tier '{tier_str}' tidak valid. Gunakan: PREMIUM, REGULAR, ECONOMY\n")
                     continue
-
-                print(f"  Masukkan {batch_count} baris order. Format tiap baris: C001 P001 PREMIUM")
-                print("  (Bisa juga pakai prefix ORDER, misalnya: ORDER C001 P001 PREMIUM)")
-                loaded = 0
-                while loaded < batch_count:
-                    line = input().strip()
-                    if not line:
-                        continue
-                    row = line.split()
-                    if row[0].upper() == "ORDER":
-                        row = row[1:]
-                    if len(row) != 3:
-                        print(f"  ✗ Baris {loaded + 1} salah: {line}")
-                        loaded += 1
-                        continue
-                    pelanggan, produk, tier_str = row[0], row[1], row[2].upper()
-                    order_counter, success, msg = tambah_order(pelanggan, produk, tier_str,
-                                                              bst_katalog, queues, cust_stacks, order_counter)
-                    print(f"  {msg}")
-                    loaded += 1
-                print(f"  Selesai memproses {batch_count} order.\n")
+                
+                prod = bst_katalog.search(produk)
+                if not prod:
+                    print(f"  ✗ Produk {produk} tidak ditemukan\n")
+                    continue
+                
+                if prod.stok <= 0:
+                    print(f"  ✗ Produk {produk} stok habis\n")
+                    continue
+                
+                order_counter += 1
+                order = Order(order_counter, pelanggan, produk, TIER[tier_str], 1, prod.harga, time.time())
+                queues[tier_str].enqueue(order)
+                
+                if pelanggan not in cust_stacks:
+                    cust_stacks[pelanggan] = Stack(kapasitas=10)
+                cust_stacks[pelanggan].push(order)
+                order_stack.push(order)
+                last_customer = pelanggan  # Update pelanggan terakhir
+                
+                print(f"  ✓ Order {order_counter}: {pelanggan} - {produk} ({tier_str}) - Rp {prod.harga:,.0f}")
+                print(f"  [O(1): Enqueue ke tier queue]\n")
 
             elif perintah == "SERVE":
                 served = False
                 for tier_name in ['PREMIUM', 'REGULAR', 'ECONOMY']:
-                    if not queues[tier_name].is_empty():
+                    while not queues[tier_name].is_empty():
                         order = queues[tier_name].dequeue()
+                        if order.order_id in canceled_orders:
+                            continue
                         prod = bst_katalog.search(order.produk_kode)
                         if prod and bst_katalog.update_stok(order.produk_kode, -1):
+                            order_stack.remove_by_condition(lambda o: o.order_id == order.order_id)
                             completed_orders.append(order)
-                            graph_rek.add_copurchase(order.produk_kode, order.produk_kode)
+                            if order.pelanggan not in customer_history:
+                                customer_history[order.pelanggan] = []
+                            for prev_produk in customer_history[order.pelanggan]:
+                                graph_rek.add_copurchase(prev_produk, order.produk_kode)
+                                graph_rek.add_copurchase(order.produk_kode, prev_produk)
+                            customer_history[order.pelanggan].append(order.produk_kode)
                             print(f"  ✓ SERVE Order {order.order_id}: {order.pelanggan} - {order.produk_kode} ({tier_name})")
                             print(f"  [O(1): Dequeue + O(log n): Update stok BST]\n")
                             served = True
                             break
+                    if served:
+                        break
                 if not served:
                     print(f"  ✗ Tidak ada order dalam antrian\n")
 
             elif perintah == "CANCEL_LAST":
-                found = False
-                for pelanggan in cust_stacks:
-                    if not cust_stacks[pelanggan].top:
-                        continue
-                    last_order = cust_stacks[pelanggan].pop()
-                    if last_order:
-                        print(f"  ✓ CANCEL Order {last_order.order_id}: {pelanggan} - {last_order.produk_kode}")
-                        print(f"  [O(1): Pop dari stack]\n")
-                        found = True
-                        break
-                if not found:
+                last_order = order_stack.pop()
+                if last_order:
+                    canceled_orders.add(last_order.order_id)
+                    tier_name = TIER_NAME[last_order.tier]
+                    queues[tier_name].remove_by_condition(lambda o: o.order_id == last_order.order_id)
+                    if last_order.pelanggan in cust_stacks:
+                        cust_stacks[last_order.pelanggan].remove_by_condition(lambda o: o.order_id == last_order.order_id)
+                    print(f"  ✓ CANCEL Order {last_order.order_id}: {last_order.pelanggan} - {last_order.produk_kode}")
+                    print(f"  [O(1): Pop dari stack]\n")
+                else:
                     print(f"  ✗ Tidak ada order untuk dibatalkan\n")
 
             elif perintah == "CARI_PRODUK" and len(parts) >= 2:
@@ -404,6 +413,9 @@ def main():
                         count = 0
                         while node and count < 10:
                             order = node.data
+                            if order.order_id in canceled_orders:
+                                node = node.next
+                                continue
                             print(f"    {count+1}. Order {order.order_id} - {order.produk_kode} - Rp {order.total_harga:,.0f}")
                             node = node.next
                             count += 1
