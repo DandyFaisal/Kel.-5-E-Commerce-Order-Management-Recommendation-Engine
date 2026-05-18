@@ -1,4 +1,4 @@
-def main():
+def main()
     # Inisialisasi
     queues = {tier: Queue() for tier in TIER}
     cust_stacks: Dict[str, Stack] = {}
