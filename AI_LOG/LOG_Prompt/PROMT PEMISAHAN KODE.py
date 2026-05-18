@@ -148,4 +148,5 @@ def main():
 
 if __name__ == "__main__":
     main()
-tolong pisah kode tersebut tiap modul dengan deskripsi dan spesifikasi sesuai dengan modul
+# PROMT : tolong pisah kode tersebut tiap modul dengan deskripsi dan spesifikasi sesuai dengan modul
+# https://chat.deepseek.com/a/chat/s/408479ed-9efd-470d-b3df-41813430bddb
