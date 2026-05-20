@@ -415,19 +415,22 @@ Benchmark performa
 Sorting laporan transaksi
 Sistem rekomendasi produk
 Riwayat transaksi pelanggan
-🏁 PENUTUP
+---
+# 🏁 PENUTUP
 
 Proyek ini dibuat sebagai implementasi nyata dari materi:
 
-Struktur Data
-Algoritma
-Analisis Kompleksitas
-Implementasi Sistem Python
+- Struktur Data
+- Algoritma
+- Analisis Kompleksitas
+- Implementasi Sistem Python
 
 Melalui proyek ini diharapkan mahasiswa dapat memahami penerapan struktur data secara langsung dalam pengembangan sistem nyata.
 
-🙏 TERIMA KASIH
-Kelompok 5
+---
 
-Algoritma dan Struktur Data
+# 🙏 TERIMA KASIH
+
+### Kelompok 5  
+Algoritma dan Struktur Data  
 Universitas Negeri Yogyakarta
