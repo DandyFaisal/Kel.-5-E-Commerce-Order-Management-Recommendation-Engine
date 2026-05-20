@@ -360,7 +360,8 @@ Kompleksitas
 O(V+E)
 Hasil
 Efektif untuk rekomendasi produk
-📌 KESIMPULAN EKSPERIMEN
+--
+# 📌 KESIMPULAN EKSPERIMEN
 
 Berdasarkan benchmark:
 
@@ -369,21 +370,23 @@ Sorting memiliki beban terbesar
 BST sangat cepat untuk pencarian
 Queue sangat efisien
 BFS cocok untuk sistem rekomendasi
-✅ KELEBIHAN PROGRAM
+--
+# ✅ KELEBIHAN PROGRAM
 Menggabungkan banyak struktur data
 Simulasi E-Commerce realistis
 Memiliki benchmark performa
 Sistem rekomendasi produk
 Mendukung prioritas pelanggan
 CLI interaktif
-❌ KEKURANGAN PROGRAM
+
+# ❌ KEKURANGAN PROGRAM
 Belum menggunakan database
 Belum memiliki GUI
 BST belum self-balancing
 Sorting masih O(n²)
 Data masih bersifat sementara
-🚀 PENGEMBANGAN SELANJUTNYA
-
+--
+# 🚀 PENGEMBANGAN SELANJUTNYA
 Pengembangan yang dapat dilakukan:
 
 Menggunakan AVL Tree
@@ -406,7 +409,8 @@ python main.py
 ├── benchmark.py
 ├── README.md
 └── requirements.txt
-📌 OUTPUT PROGRAM
+--
+# 📌 OUTPUT PROGRAM
 
 Program akan menampilkan:
 
