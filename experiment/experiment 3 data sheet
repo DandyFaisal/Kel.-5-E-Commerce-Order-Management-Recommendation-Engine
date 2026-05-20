@@ -1,0 +1,52 @@
+==========================================================================================
+                         EKSPERIMEN PERBANDINGAN PERFORMA PROGRAM                         
+==========================================================================================
+Dataset     Bubble Sort       Insertion Sort    BST Search        Queue Serve       Graph BFS         
+------------------------------------------------------------------------------------------
+50          0.000076          0.000057          0.000010          0.000035          0.000019          
+100         0.000417          0.000288          0.000012          0.000026          0.000015          
+300         0.002553          0.001995          0.000043          0.000152          0.000027          
+------------------------------------------------------------------------------------------
+
+ANALISIS PERFORMA:
+1. Bubble Sort dan Insertion Sort memiliki kompleksitas O(n²)
+2. BST Search memiliki kompleksitas rata-rata O(log n)
+3. Queue enqueue/dequeue memiliki kompleksitas O(1)
+4. Graph BFS memiliki kompleksitas O(V + E)
+5. Runtime meningkat seiring pertambahan ukuran dataset
+6. Sorting menjadi modul paling berat saat dataset besar
+==========================================================================================
+
+==========================================================================================
+                           DEMONSTRASI PROGRAM INTERAKTIF (CLI)                           
+==========================================================================================
+
+SKENARIO UJI REALISTIS:
+
+> ORDER C001 P001 PREMIUM
+> ORDER C002 P002 REGULAR
+> ORDER C003 P003 ECONOMY
+
+> SERVE
+Queue akan memproses PREMIUM lebih dulu
+
+> CARI_PRODUK P001
+BST melakukan pencarian produk
+
+> UPDATE_STOK P001 10
+BST update stok produk
+
+> REKOMENDASI P001
+Graph BFS memberikan rekomendasi produk
+
+> RIWAYAT C001
+Stack menampilkan riwayat transaksi
+
+> LAPORAN_HARIAN
+Bubble Sort & Insertion Sort dijalankan
+
+> CANCEL_LAST
+Stack undo order terakhir
+
+> KELUAR
+==========================================================================================
