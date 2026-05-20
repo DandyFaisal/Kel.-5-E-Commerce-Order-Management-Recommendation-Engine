@@ -53,6 +53,90 @@ Tujuan dari proyek ini adalah:
 
 ---
 
+# 👨‍💻 PEMBAGIAN TUGAS ANGGOTA
+
+> Setiap anggota mengerjakan minimal 1 modul sesuai ketentuan proyek.
+
+| No | Nama | Modul yang Dikerjakan |
+|---|---|---|
+| 1 | Dandy Faisal Bimasena | Multi-Priority Order Queue + CLI E-Commerce |
+| 2 | Dewangga Dai Prabawa | BST Katalog Produk |
+| 3 | Muhammad Fathir Al Malik | Graph Rekomendasi + Sorting Laporan Harian |
+| 4 | Muhammad Raykhan Faddillah | Stack Riwayat Transaksi + Benchmark Performa |
+
+---
+
+# 📌 DETAIL PEMBAGIAN MODUL
+
+## 1️⃣ Dandy Faisal Bimasena
+
+### Modul:
+- Multi-Priority Order Queue
+- CLI E-Commerce
+
+### Tanggung Jawab:
+- Implementasi Queue berbasis Linked List
+- Sistem prioritas:
+  - PREMIUM
+  - REGULAR
+  - ECONOMY
+- Command CLI:
+  - `ORDER`
+  - `SERVE`
+  - `BANTUAN`
+  - `KELUAR`
+
+---
+
+## 2️⃣ Dewangga Dai Prabawa
+
+### Modul:
+- BST Katalog Produk
+
+### Tanggung Jawab:
+- Implementasi Binary Search Tree
+- Search produk
+- Update stok
+- Traversal inorder katalog
+
+---
+
+## 3️⃣ Muhammad Fathir Al Malik
+
+### Modul:
+- Graph Rekomendasi
+- Sorting Laporan Harian
+
+### Tanggung Jawab:
+- Implementasi graph co-purchase
+- BFS recommendation system
+- Bubble Sort
+- Insertion Sort
+- Analisis sorting runtime
+
+---
+
+## 4️⃣ Muhammad Raykhan Faddillah
+
+### Modul:
+- Stack Riwayat Transaksi
+- Benchmark Performa
+
+### Tanggung Jawab:
+- Stack transaksi pelanggan
+- Undo / Cancel order
+- Benchmark runtime:
+  - Queue
+  - BST
+  - Graph BFS
+  - Sorting
+- Analisis performa dataset:
+  - 50
+  - 100
+  - 300
+
+---
+
 # 🧩 STRUKTUR DATA YANG DIGUNAKAN
 
 ## 1️⃣ Linked List
@@ -80,6 +164,7 @@ Diimplementasikan pada class `Queue`.
   - ECONOMY
 
 ### Kompleksitas:
+
 | Operasi | Kompleksitas |
 |---|---|
 | Enqueue | O(1) |
@@ -99,6 +184,7 @@ Diimplementasikan pada class `Stack`.
 - Undo / Cancel order terakhir
 
 ### Kompleksitas:
+
 | Operasi | Kompleksitas |
 |---|---|
 | Push | O(1) |
@@ -109,6 +195,7 @@ Diimplementasikan pada class `Stack`.
 ## 4️⃣ Binary Search Tree (BST)
 
 Diimplementasikan pada:
+
 - `BSTNode`
 - `BSTKatalog`
 
@@ -119,6 +206,7 @@ Diimplementasikan pada:
 - Traversal data produk
 
 ### Kompleksitas:
+
 | Operasi | Kompleksitas |
 |---|---|
 | Insert | O(log n) |
@@ -139,80 +227,58 @@ Diimplementasikan pada class `GraphRekomendasi`.
 - Breadth First Search (BFS)
 
 ### Kompleksitas:
+
 ```math
 O(V + E)
-```
-
----
-
-## 6️⃣ Dictionary (Hash Table)
+6️⃣ Dictionary (Hash Table)
 
 Digunakan untuk:
-- Tier pelanggan
-- Queue pelanggan
-- Relasi graph
-- Data pelanggan
 
-### Kelebihan:
-- Akses data sangat cepat
-
----
-
-## 7️⃣ List (Dynamic Array)
+Tier pelanggan
+Queue pelanggan
+Relasi graph
+Data pelanggan
+Kelebihan:
+Akses data sangat cepat
+7️⃣ List (Dynamic Array)
 
 Digunakan untuk:
-- Menyimpan data produk
-- Menyimpan laporan transaksi
-- Menyimpan hasil traversal
 
----
-
-# ⚙️ FITUR PROGRAM
-
-| Fitur | Deskripsi |
-|---|---|
-| ORDER | Menambahkan order pelanggan |
-| SERVE | Memproses order berdasarkan tier |
-| CANCEL_LAST | Membatalkan order terakhir |
-| CARI_PRODUK | Mencari produk |
-| UPDATE_STOK | Mengupdate stok |
-| REKOMENDASI | Memberikan rekomendasi produk |
-| RIWAYAT | Menampilkan riwayat transaksi |
-| LAPORAN_HARIAN | Menampilkan laporan transaksi |
-| BANTUAN | Menampilkan daftar command |
-| KELUAR | Menutup program |
-
----
-
-# 🔄 ALGORITMA SORTING
-
-## 🔹 Bubble Sort
+Menyimpan data produk
+Menyimpan laporan transaksi
+Menyimpan hasil traversal
+⚙️ FITUR PROGRAM
+Fitur	Deskripsi
+ORDER	Menambahkan order pelanggan
+SERVE	Memproses order berdasarkan tier
+CANCEL_LAST	Membatalkan order terakhir
+CARI_PRODUK	Mencari produk
+UPDATE_STOK	Mengupdate stok
+REKOMENDASI	Memberikan rekomendasi produk
+RIWAYAT	Menampilkan riwayat transaksi
+LAPORAN_HARIAN	Menampilkan laporan transaksi
+BANTUAN	Menampilkan daftar command
+KELUAR	Menutup program
+🔄 ALGORITMA SORTING
+🔹 Bubble Sort
 
 Digunakan untuk:
-- Sorting berdasarkan total harga
 
-### Kompleksitas:
-```math
-O(n^2)
-```
-
----
-
-## 🔹 Insertion Sort
+Sorting berdasarkan total harga
+Kompleksitas:
+O(n
+2
+)
+🔹 Insertion Sort
 
 Digunakan untuk:
-- Sorting berdasarkan waktu transaksi
 
-### Kompleksitas:
-```math
-O(n^2)
-```
-
----
-
-# 🛠️ ALUR SISTEM
-
-```text
+Sorting berdasarkan waktu transaksi
+Kompleksitas:
+O(n
+2
+)
+🛠️ ALUR SISTEM
 Pelanggan Order
        ↓
 Queue berdasarkan Tier
@@ -226,15 +292,8 @@ Stack Simpan Riwayat
 Graph Update Relasi Produk
        ↓
 Sistem Rekomendasi BFS
-```
-
----
-
-# 💻 CONTOH PENGGUNAAN PROGRAM
-
-## 📌 Skenario Uji Realistis
-
-```bash
+💻 CONTOH PENGGUNAAN PROGRAM
+📌 Skenario Uji Realistis
 > ORDER C001 P001 PREMIUM
 > ORDER C002 P002 REGULAR
 > ORDER C003 P003 ECONOMY
@@ -261,206 +320,115 @@ Bubble Sort & Insertion Sort dijalankan
 Stack undo order terakhir
 
 > KELUAR
-```
-
----
-
-# 📊 EKSPERIMEN PERFORMA PROGRAM
+📊 EKSPERIMEN PERFORMA PROGRAM
 
 Program dilengkapi benchmark performa untuk menguji efisiensi algoritma dan struktur data.
 
----
-
-# 📦 DATASET PENGUJIAN
-
-| Dataset | Jumlah Data |
-|---|---|
-| Kecil | 50 |
-| Sedang | 100 |
-| Besar | 300 |
-
----
-
-# 🧪 MODUL YANG DIUJI
-
-| Modul | Pengujian |
-|---|---|
-| Bubble Sort | Sorting harga |
-| Insertion Sort | Sorting waktu |
-| BST Search | Pencarian produk |
-| Queue | Proses dequeue |
-| Graph BFS | Sistem rekomendasi |
-
----
-
-# 📈 ANALISIS PERFORMA
-
-## 🔹 Bubble Sort & Insertion Sort
-
-Kompleksitas:
-
-```math
-O(n^2)
-```
-
-### Hasil:
-- Runtime meningkat signifikan saat dataset besar
-- Sorting menjadi modul paling berat
-
----
-
-## 🔹 BST Search
-
-Kompleksitas:
-
-```math
-O(log n)
-```
-
-### Hasil:
-- Pencarian tetap cepat
-- Sangat efisien untuk katalog produk
-
----
-
-## 🔹 Queue
-
-Kompleksitas:
-
-```math
+📦 DATASET PENGUJIAN
+Dataset	Jumlah Data
+Kecil	50
+Sedang	100
+Besar	300
+🧪 MODUL YANG DIUJI
+Modul	Pengujian
+Bubble Sort	Sorting harga
+Insertion Sort	Sorting waktu
+BST Search	Pencarian produk
+Queue	Proses dequeue
+Graph BFS	Sistem rekomendasi
+📈 ANALISIS PERFORMA
+🔹 Bubble Sort & Insertion Sort
+Kompleksitas
+O(n
+2
+)
+Hasil
+Runtime meningkat signifikan saat dataset besar
+Sorting menjadi modul paling berat
+🔹 BST Search
+Kompleksitas
+O(logn)
+Hasil
+Pencarian tetap cepat
+Sangat efisien untuk katalog produk
+🔹 Queue
+Kompleksitas
 O(1)
-```
-
-### Hasil:
-- Sangat optimal untuk sistem antrian
-
----
-
-## 🔹 Graph BFS
-
-Kompleksitas:
-
-```math
-O(V + E)
-```
-
-### Hasil:
-- Efektif untuk rekomendasi produk
-
----
-
-# 📌 KESIMPULAN EKSPERIMEN
+Hasil
+Sangat optimal untuk sistem antrian
+🔹 Graph BFS
+Kompleksitas
+O(V+E)
+Hasil
+Efektif untuk rekomendasi produk
+📌 KESIMPULAN EKSPERIMEN
 
 Berdasarkan benchmark:
 
-- Runtime meningkat seiring ukuran dataset
-- Sorting memiliki beban terbesar
-- BST sangat cepat untuk pencarian
-- Queue sangat efisien
-- BFS cocok untuk sistem rekomendasi
-
----
-
-# ✅ KELEBIHAN PROGRAM
-
-- Menggabungkan banyak struktur data
-- Simulasi E-Commerce realistis
-- Memiliki benchmark performa
-- Sistem rekomendasi produk
-- Mendukung prioritas pelanggan
-- CLI interaktif
-
----
-
-# ❌ KEKURANGAN PROGRAM
-
-- Belum menggunakan database
-- Belum memiliki GUI
-- BST belum self-balancing
-- Sorting masih O(n²)
-- Data masih bersifat sementara
-
----
-
-# 🚀 PENGEMBANGAN SELANJUTNYA
+Runtime meningkat seiring ukuran dataset
+Sorting memiliki beban terbesar
+BST sangat cepat untuk pencarian
+Queue sangat efisien
+BFS cocok untuk sistem rekomendasi
+✅ KELEBIHAN PROGRAM
+Menggabungkan banyak struktur data
+Simulasi E-Commerce realistis
+Memiliki benchmark performa
+Sistem rekomendasi produk
+Mendukung prioritas pelanggan
+CLI interaktif
+❌ KEKURANGAN PROGRAM
+Belum menggunakan database
+Belum memiliki GUI
+BST belum self-balancing
+Sorting masih O(n²)
+Data masih bersifat sementara
+🚀 PENGEMBANGAN SELANJUTNYA
 
 Pengembangan yang dapat dilakukan:
 
-- Menggunakan AVL Tree
-- Menggunakan Merge Sort / Quick Sort
-- Menambahkan database SQLite/MySQL
-- Membuat GUI berbasis web
-- Sistem login pengguna
-- Sistem pembayaran
-
----
-
-# ▶️ CARA MENJALANKAN PROGRAM
-
-## 1️⃣ Clone Repository
-
-```bash
+Menggunakan AVL Tree
+Menggunakan Merge Sort / Quick Sort
+Menambahkan database SQLite/MySQL
+Membuat GUI berbasis web
+Sistem login pengguna
+Sistem pembayaran
+▶️ CARA MENJALANKAN PROGRAM
+1️⃣ Clone Repository
 git clone <link-repository>
-```
-
----
-
-## 2️⃣ Masuk ke Folder
-
-```bash
+2️⃣ Masuk ke Folder
 cd nama-folder
-```
-
----
-
-## 3️⃣ Jalankan Program
-
-```bash
+3️⃣ Jalankan Program
 python main.py
-```
-
----
-
-# 📂 STRUKTUR FILE
-
-```text
+📂 STRUKTUR FILE
 📁 project-folder
 │
 ├── main.py
 ├── benchmark.py
 ├── README.md
 └── requirements.txt
-```
-
----
-
-# 📌 OUTPUT PROGRAM
+📌 OUTPUT PROGRAM
 
 Program akan menampilkan:
 
-- Sistem CLI interaktif
-- Benchmark performa
-- Sorting laporan transaksi
-- Sistem rekomendasi produk
-- Riwayat transaksi pelanggan
-
----
-
-# 🏁 PENUTUP
+Sistem CLI interaktif
+Benchmark performa
+Sorting laporan transaksi
+Sistem rekomendasi produk
+Riwayat transaksi pelanggan
+🏁 PENUTUP
 
 Proyek ini dibuat sebagai implementasi nyata dari materi:
 
-- Struktur Data
-- Algoritma
-- Analisis Kompleksitas
-- Implementasi Sistem Python
+Struktur Data
+Algoritma
+Analisis Kompleksitas
+Implementasi Sistem Python
 
 Melalui proyek ini diharapkan mahasiswa dapat memahami penerapan struktur data secara langsung dalam pengembangan sistem nyata.
 
----
+🙏 TERIMA KASIH
+Kelompok 5
 
-# 🙏 TERIMA KASIH
-
-### Kelompok 5  
-Algoritma dan Struktur Data  
+Algoritma dan Struktur Data
 Universitas Negeri Yogyakarta
