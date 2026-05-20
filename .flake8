@@ -1,0 +1,12 @@
+# Flake8 configuration - exclude AI_LOG folder from linting
+[flake8]
+exclude = 
+    .git,
+    __pycache__,
+    .venv,
+    venv,
+    AI_LOG,
+    .eggs,
+    *.egg
+max-line-length = 127
+max-complexity = 10
