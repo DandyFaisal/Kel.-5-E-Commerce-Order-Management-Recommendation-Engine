@@ -362,9 +362,7 @@ Hasil
 Efektif untuk rekomendasi produk
 --
 # 📌 KESIMPULAN EKSPERIMEN
-
 Berdasarkan benchmark:
-
 Runtime meningkat seiring ukuran dataset
 Sorting memiliki beban terbesar
 BST sangat cepat untuk pencarian
@@ -386,34 +384,8 @@ BST belum self-balancing
 Sorting masih O(n²)
 Data masih bersifat sementara
 --
-# 🚀 PENGEMBANGAN SELANJUTNYA
-Pengembangan yang dapat dilakukan:
-
-Menggunakan AVL Tree
-Menggunakan Merge Sort / Quick Sort
-Menambahkan database SQLite/MySQL
-Membuat GUI berbasis web
-Sistem login pengguna
-Sistem pembayaran
-▶️ CARA MENJALANKAN PROGRAM
-1️⃣ Clone Repository
-git clone <link-repository>
-2️⃣ Masuk ke Folder
-cd nama-folder
-3️⃣ Jalankan Program
-python main.py
-📂 STRUKTUR FILE
-📁 project-folder
-│
-├── main.py
-├── benchmark.py
-├── README.md
-└── requirements.txt
---
 # 📌 OUTPUT PROGRAM
-
 Program akan menampilkan:
-
 Sistem CLI interaktif
 Benchmark performa
 Sorting laporan transaksi
@@ -421,18 +393,14 @@ Sistem rekomendasi produk
 Riwayat transaksi pelanggan
 ---
 # 🏁 PENUTUP
-
 Proyek ini dibuat sebagai implementasi nyata dari materi:
-
 - Struktur Data
 - Algoritma
 - Analisis Kompleksitas
 - Implementasi Sistem Python
 
 Melalui proyek ini diharapkan mahasiswa dapat memahami penerapan struktur data secara langsung dalam pengembangan sistem nyata.
-
 ---
-
 # 🙏 TERIMA KASIH
 
 ### Kelompok 5  
