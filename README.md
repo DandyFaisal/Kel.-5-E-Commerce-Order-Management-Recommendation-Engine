@@ -319,23 +319,24 @@ Bubble Sort & Insertion Sort dijalankan
 Stack undo order terakhir
 
 > KELUAR
-📊 EKSPERIMEN PERFORMA PROGRAM
-
+--
+# 📊 EKSPERIMEN PERFORMA PROGRAM
 Program dilengkapi benchmark performa untuk menguji efisiensi algoritma dan struktur data.
-
 📦 DATASET PENGUJIAN
 Dataset	Jumlah Data
 Kecil	50
 Sedang	100
 Besar	300
-🧪 MODUL YANG DIUJI
+--
+# 🧪 MODUL YANG DIUJI
 Modul	Pengujian
 Bubble Sort	Sorting harga
 Insertion Sort	Sorting waktu
 BST Search	Pencarian produk
 Queue	Proses dequeue
 Graph BFS	Sistem rekomendasi
-📈 ANALISIS PERFORMA
+--
+# 📈 ANALISIS PERFORMA
 🔹 Bubble Sort & Insertion Sort
 Kompleksitas
 O(n
