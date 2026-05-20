@@ -1,3 +1,3 @@
-from src.main import Queue, Stack, Produk, Order, TIER, TIER_NAME, BSTKatalog
+from src.main import Queue, Stack, Produk, Order, TIER, TIER_NAME, BSTKatalog, GraphRekomendasi
 
-__all__ = ["Queue", "Stack", "Produk", "Order", "TIER", "TIER_NAME", "BSTKatalog"]
+__all__ = ["Queue", "Stack", "Produk", "Order", "TIER", "TIER_NAME", "BSTKatalog", "GraphRekomendasi"]
