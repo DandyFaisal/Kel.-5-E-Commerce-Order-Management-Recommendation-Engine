@@ -228,7 +228,6 @@ Diimplementasikan pada class `GraphRekomendasi`.
 
 ### Kompleksitas:
 
-```math
 O(V + E)
 6️⃣ Dictionary (Hash Table)
 
