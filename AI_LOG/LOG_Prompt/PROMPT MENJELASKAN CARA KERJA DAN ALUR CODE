@@ -1,0 +1,75 @@
+prompt:jelaskan alur dan cara kerja code ini
+
+Program ini adalah simulasi toko online sederhana yang bisa dijalankan lewat terminal. User ngetik perintah, program merespons.
+
+Struktur Data yang Dipakai
+Sebelum masuk alur, ada 4 struktur data utama:
+StrukturDipakai untukQueueAntrian order per tierStackRiwayat order pelanggan & cancelBSTKatalog & pencarian produkGraphRekomendasi produk
+
+Alur Utama Program
+1. Pertama Jalan
+main() dipanggil
+→ Bikin 3 Queue (PREMIUM, REGULAR, ECONOMY)
+→ Bikin BST, isi 100 produk (P001-P100)
+→ Bikin Graph kosong
+→ Masuk loop "tunggu perintah user"
+
+2. User Ketik ORDER C001 P001 PREMIUM
+Cek produk P001 di BST → ketemu?
+Cek stok > 0?
+Buat objek Order
+→ Masuk Queue PREMIUM    (buat antrian)
+→ Masuk Stack C001       (buat riwayat pelanggan)
+→ Masuk order_stack      (buat cancel)
+
+3. User Ketik SERVE
+Cek Queue PREMIUM dulu → ada isi?
+Ambil order paling depan (dequeue)
+Cek apakah order sudah di-cancel → skip kalau iya
+Kurangi stok produk di BST -1
+Catat ke completed_orders
+→ Catat ke customer_history
+→ add_copurchase ke Graph (hubungkan produk ini dengan produk sebelumnya)
+Ini bagian paling penting karena graph rekomendasi diisi di sini.
+
+4. User Ketik CANCEL_LAST
+Pop dari order_stack (ambil order paling baru)
+Tandai order_id sebagai canceled
+Hapus dari Queue tier-nya
+Hapus dari Stack pelanggannya
+
+5. User Ketik REKOMENDASI P001
+Graph cari P001 → ada tetangga?
+BFS jalan:
+  Hop 1 → produk yang sering dibeli bareng P001
+  Hop 2 → produk yang sering dibeli bareng produk hop 1
+Kembalikan semua produk yang ditemukan
+
+6. User Ketik LAPORAN_HARIAN
+Ambil semua completed_orders
+Jalankan bubble_sort → urutkan by harga (mahal ke murah)
+Jalankan insertion_sort → urutkan by waktu (awal ke akhir)
+Tampilkan 5 teratas masing-masing
+
+Alur Lengkap dalam 1 Gambar
+START
+  │
+  ├─ Generate 100 produk → masuk BST
+  │
+  └─ Loop perintah
+        │
+        ├─ ORDER → Queue + Stack
+        │
+        ├─ SERVE → Queue keluar → BST update stok
+        │               └─ Graph diisi (copurchase)
+        │
+        ├─ CANCEL_LAST → Stack pop → hapus dari Queue
+        │
+        ├─ REKOMENDASI → BFS di Graph
+        │
+        ├─ LAPORAN_HARIAN → Bubble Sort + Insertion Sort
+        │
+        └─ KELUAR → program berhenti
+
+Intinya
+Program ini mensimulasikan gimana toko online kerja — dari order masuk, diproses sesuai prioritas tier, sampai ngasih rekomendasi produk berdasarkan kebiasaan beli bareng. Semua fiturnya nyambung satu sama lain, bukan fitur yang berdiri sendiri.
